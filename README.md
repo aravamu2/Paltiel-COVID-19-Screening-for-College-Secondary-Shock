@@ -1,1 +1,1 @@
-# Paltiel-COVID-19-Screening-for-College-Secondary-Shock
+# Paltiel-COVID-19-Screening-for-College
