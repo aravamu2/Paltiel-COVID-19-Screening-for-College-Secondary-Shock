@@ -79,6 +79,17 @@ body <- dashboardBody(
     .skin-blue .main-header .navbar .dropdown-menu li a:hover{ background:#8F0000; }
     "
   )),
+  tags$style(HTML(
+    "
+    .small-box h3 {
+      font-size: 28px;
+    }
+    
+    .small-box .icon-large {
+      font-size: 55px;
+    }
+    "
+  )),
   tabItems(
     ## Dashboard ---------------------------------------------------------------
     tabItem(
