@@ -168,10 +168,12 @@ body <- dashboardBody(
                                             "Every 3 days",
                                             "Every 2 days",
                                             "Daily"),
-                                selected = "Weekly")
+                                selected = "Weekly"),
+                 numericInput("new_time_to_return_fps", "New time to return FPs from Isolation (days)", value = 1,
+                              min = 0),
              ),
       ),
-      ## Outputs: plot and metrics ----------------------------------------------
+      ## Outputs: plot and metrics ---------------------------------------------
       column(width = 6, 
              fluidRow(
                valueBoxOutput("testing_cost_box", width = 4),
@@ -373,7 +375,7 @@ server <- function(input, output) {
     showWarningIf(input$new_R0 > 5, "The value for new R0 you entered is above the recommended maximum of 5.")
   })
   
-  ## Reactive elements -------------------------------------------------------
+  ## Reactive elements ---------------------------------------------------------
   df <- reactive({
     req(input$initial_susceptible,
         input$initial_infected,
@@ -427,6 +429,7 @@ server <- function(input, output) {
       input$new_frequency_of_screening == "Symptoms Only" ~ 99999999999
     )
     new.beta <- input$new_R0*(rho+sigma)
+    new.mu <- 1/(cycles.per.day*input$new_time_to_return_fps)
     
     n.cycle <- 240
     
@@ -474,8 +477,8 @@ server <- function(input, output) {
           rbind(
             mat,
             c(i,
-              max(0,mat[i,2]*(1-new.beta*(mat[i,5]/(mat[i,2]+mat[i,5]+mat[i,4])))+mat[i,3]*mu-mat[i-1,2]*(1-input$test_specificity)/new.cycles.per.test-superspreader.event[i+1]*superspreader.infections[i+1]),
-              max(0,mat[i,3]*(1-mu)+mat[i-1,2]*(1-input$test_specificity)/new.cycles.per.test),
+              max(0,mat[i,2]*(1-new.beta*(mat[i,5]/(mat[i,2]+mat[i,5]+mat[i,4])))+mat[i,3]*new.mu-mat[i-1,2]*(1-input$test_specificity)/new.cycles.per.test-superspreader.event[i+1]*superspreader.infections[i+1]),
+              max(0,mat[i,3]*(1-new.mu)+mat[i-1,2]*(1-input$test_specificity)/new.cycles.per.test),
               max(0,mat[i,4]*(1-theta)+new.beta*(mat[i,2]*mat[i,5]/(mat[i,2]+mat[i,5]+mat[i,4]))+superspreader.event[i+1]*superspreader.infections[i+1]),
               max(0,mat[i,5]*(1-sigma-rho)+mat[i,4]*theta-mat[i-1,5]*input$test_sensitivity/new.cycles.per.test),
               max(0,mat[i,6]*(1-delta-rho)+(mat[i,5]+mat[i,7])*sigma),

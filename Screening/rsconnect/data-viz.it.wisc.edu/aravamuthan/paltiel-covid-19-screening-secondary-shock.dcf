@@ -5,8 +5,8 @@ account: aravamuthan
 server: data-viz.it.wisc.edu
 hostUrl: https://data-viz.it.wisc.edu/__api__
 appId: 74
-bundleId: 324
+bundleId: 329
 url: https://data-viz.it.wisc.edu/covid-19-screening-secondary-shock/
-when: 1599462097.26196
+when: 1599949322.47858
 asMultiple: FALSE
 asStatic: FALSE
